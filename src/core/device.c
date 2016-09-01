@@ -613,6 +613,8 @@ static void device_enumerate(Manager *m) {
 
         assert(m);
 
+	log_info("Starting device_enumerate...");
+
         if (!m->udev_monitor) {
                 m->udev_monitor = udev_monitor_new_from_netlink(m->udev, "udev");
                 if (!m->udev_monitor) {
@@ -676,6 +678,7 @@ static void device_enumerate(Manager *m) {
                 const char *sysfs;
 
                 sysfs = udev_list_entry_get_name(item);
+		log_info("Device enumarating sysfs %s", sysfs);
 
                 dev = udev_device_new_from_syspath(m->udev, sysfs);
                 if (!dev) {
@@ -683,8 +686,10 @@ static void device_enumerate(Manager *m) {
                         continue;
                 }
 
-                if (!device_is_ready(dev))
+                if (!device_is_ready(dev)) {
+			log_info("Device not READY sysfs %s", sysfs);
                         continue;
+		}
 
                 (void) device_process_new(m, dev);
 
