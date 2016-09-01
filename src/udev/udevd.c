@@ -794,6 +794,7 @@ static void event_queue_start(Manager *manager) {
 
         assert_se(sd_event_now(manager->event, clock_boottime_or_monotonic(), &usec) >= 0);
         /* check for changed config, every 3 seconds at most */
+/*
         if (manager->last_usec == 0 ||
             (usec - manager->last_usec) > 3 * USEC_PER_SEC) {
                 if (udev_rules_check_timestamp(manager->rules) ||
@@ -802,6 +803,7 @@ static void event_queue_start(Manager *manager) {
 
                 manager->last_usec = usec;
         }
+*/
 
         udev_builtin_init(manager->udev);
 
