@@ -699,6 +699,7 @@ static void device_enumerate(Manager *m) {
         return;
 
 fail:
+	log_info("Device fail to enumerate");
         device_shutdown(m);
 }
 
@@ -727,6 +728,8 @@ static int device_dispatch_io(sd_event_source *source, int fd, uint32_t revents,
         if (!dev)
                 return 0;
 
+	log_info("device_dispatch_io enter...");
+
         sysfs = udev_device_get_syspath(dev);
         if (!sysfs) {
                 log_error("Failed to get udev sys path.");
@@ -738,6 +741,8 @@ static int device_dispatch_io(sd_event_source *source, int fd, uint32_t revents,
                 log_error("Failed to get udev action string.");
                 return 0;
         }
+
+	log_info("device_dispatch_io action %s sysfs %s...", action, sysfs);
 
         if (streq(action, "remove"))  {
                 r = swap_process_device_remove(m, dev);
